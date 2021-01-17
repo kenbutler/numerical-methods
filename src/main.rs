@@ -27,26 +27,31 @@ fn main() {
         let f = i as f64;
         let sl = SIGNAL_LENGTH as f64;
         time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
-        let radians = time[i] * 2.0 * PI;
+        let radians = 2.0 * PI * time[i];
         sin_fn[i].re = radians.sin();
         cos_fn[i].re = radians.cos();
-        if i > SIGNAL_LENGTH / 2 {
-            step_fn[i].re = 1.0;  // Step in latter half
-        }
+        step_fn[i].re = 1.0;
     }
 
     // Execute FFT
     let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
-    let mut res = fft::fft(sin_fn, sampling_freq);
-    for i in 0..res.0.len() {
-        debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
-    }
+    let mut res;
+
+    //    info!("FFT of Sine Function");
+    //    res = fft::fft(sin_fn, sampling_freq);
+    //    for i in 0..res.0.len() {
+    //        debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
+    //    }
+
+    info!("FFT of Cosine Function");
     res = fft::fft(cos_fn, sampling_freq);
-    for i in 0..res.0.len() {
+    for i in 0..5 {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
+
+    info!("FFT of Step Function");
     res = fft::fft(step_fn, sampling_freq);
-    for i in 0..res.0.len() {
+    for i in 0..5 {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
 }

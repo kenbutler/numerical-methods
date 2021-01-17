@@ -31,18 +31,15 @@ pub fn fft(signal: Vec<Complex<f64>>, sampling_frequency: f64) -> (Vec<f64>, Vec
 
     // Set magnitudes
     let mut magnitudes: Vec<f64> = vec![0.0; signal.len()];
-    for i in 0..real.len() {
+    for i in 0..magnitudes.len() {
         magnitudes[i] = (real[i] * real[i] + imag[i] * imag[i]).sqrt();
     }
 
     // Set frequencies
     let mut freq: Vec<f64> = vec![0.0; signal.len() / 2];
     let stop = signal.len() * (sampling_frequency as usize / 2 - 1);
-//    let stop: usize = real.len() * ((sampling_frequency / 2.0) as usize - 2);
-    let step_size = 2 * ((sampling_frequency / 2.0) as usize) - 1;
-    debug!("freq size = {}, stop={}, step size={}", freq.len(), stop, step_size);
     let mut idx = 0 as usize;
-    for i in (0..stop).step_by(step_size) {
+    for i in (0..stop).step_by(sampling_frequency as usize) {
         freq[idx] = (i as f64) / (real.len() as f64);
         idx += 1;
     }
@@ -59,14 +56,14 @@ fn scramble(x: &mut Vec<f64>, y: &mut Vec<f64>) {
         error!("Real and imaginary vectors must be the same size.");
     }
     let n = x.len();
-    const BASE: f64 = 2.0;
-    let m = ((n as f64).ln() / BASE.ln()) as i32;
+    const BASE: f32 = 2.0;
+    let m = ((n as f32).ln() / BASE.ln()) as i32;
     let mut n2: usize = n;
-    for _k in 1..m {
+    for _k in 0..m {
         let n1 = n2;
         n2 /= 2;
         let mut angle: f64 = 0.0;
-        let arg: f64 = 2.0 * PI / (n1 as f64);
+        let arg = 2.0 * PI / (n1 as f64);
         for j in 0..n2 - 1 {
             let c = angle.cos();
             let s = -(angle.sin());
@@ -74,8 +71,8 @@ fn scramble(x: &mut Vec<f64>, y: &mut Vec<f64>) {
                 let idx = i as usize;
                 let kk: usize = idx + n2;
                 let xt: f64 = x[idx] - x[kk];
-                x[idx] += x[kk];
                 let yt: f64 = y[idx] - y[kk];
+                x[idx] += x[kk];
                 y[idx] += y[kk];
                 x[kk] = xt * c - yt * s;
                 y[kk] = yt * c + xt * s;
@@ -98,31 +95,28 @@ fn unscramble(x: &mut Vec<f64>, y: &mut Vec<f64>) {
     let mut j = 0;
     let mut k: i32;
 
-    for i in 0..n-2 {
+    for i in 0..n - 2 {
         if i < j {
             // TODO: Is there a better way to swap values here?
             let idx_i = i as usize;
             let idx_j = j as usize;
             let xt = x[idx_j];
+            let yt = y[idx_j];
             x[idx_j] = x[idx_i];
             x[idx_i] = xt;
-            let yt = y[idx_j];
             y[idx_j] = y[idx_i];
             y[idx_i] = yt;
         }
         k = n / 2;
-        loop {
-            if k >= j + 1 {
-                break;
-            }
+        while k <= j {
             j -= k;
             k /= 2;
         }
         j += k;
     }
-    for i in 0..n-1 {
+    for i in 0..n - 1 {
         let idx_i = i as usize;
         x[idx_i] /= n as f64;
         y[idx_i] /= n as f64;
     }
-}
+}  // unscramble()
