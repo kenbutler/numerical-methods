@@ -1,7 +1,8 @@
 // Modules
 mod fft;
 
- use std::f32::consts::PI;
+use std::f32::consts::PI;
+use num_complex::Complex;
 
 fn main() {
     println!("Testing FFT...");
@@ -10,24 +11,26 @@ fn main() {
     // Define time vector
     let mut time: Vec<f32> = vec![0.0; SIGNAL_LENGTH];
 
-    // Various functions
-    let mut sin_fn: Vec<f32> = vec![0.0; time.len()];  // sin(2*pi*t)
-    let mut cos_fn: Vec<f32> = vec![0.0; time.len()];  // cos(2*pi*t)
-    let mut step_fn: Vec<f32> = vec![0.0; time.len()];
+    // Various functions. Treat as complex signals, even if they're not. It's an interface requirement
+    let mut sin_fn: Vec<Complex<f32>> = vec![Complex::new(0.0, 0.0); time.len()];  // sin(2*pi*t)
+    let mut cos_fn: Vec<Complex<f32>> = vec![Complex::new(0.0, 0.0); time.len()];  // cos(2*pi*t)
+    let mut step_fn: Vec<Complex<f32>> = vec![Complex::new(0.0, 0.0); time.len()];  // Step function
 
     // Populate vectors
     for i in 0..SIGNAL_LENGTH {
         let f = i as f32;
         let sl = SIGNAL_LENGTH as f32;
         time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
-        let rad = time[i] * 2.0 * PI;
-        sin_fn[i] = rad.sin();
-        cos_fn[i] = rad.cos();
+        let radians = time[i] * 2.0 * PI;
+        sin_fn[i].re = radians.sin();
+        cos_fn[i].re = radians.cos();
         if i > SIGNAL_LENGTH / 2 {
-            step_fn[i] = 1.0;
+            step_fn[i].re = 1.0;  // Step in latter half
         }
     }
 
     // Execute FFT
     fft::fft(sin_fn);
+    fft::fft(cos_fn);
+    fft::fft(step_fn);
 }

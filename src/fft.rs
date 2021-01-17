@@ -1,28 +1,37 @@
 
+use num_complex::Complex;
+
 /// Computes Fast Fourier Transform (FFT)
 ///
 /// While there is an existing, more-optimized FFT crate that Rust offers, this was completed
 /// as a sample exercise.
 /// Existing crate: https://docs.rs/rustfft/5.0.1/rustfft/
 ///
-/// * `signal` - Integer representing the length of the provided signal. Ideally this is a multiple of 2.
-pub fn fft(signal: Vec<f32>) {
+/// * `signal` - Complex signal
+pub fn fft(signal: Vec<Complex<f32>>) -> Vec<Complex<f32>> {
 
-    // TODO: Determine length of signal
-    // TODO: Split signal into real and imaginary portions
+    // Split signal into real and imaginary portions
+    let mut real: Vec<f32> = vec![0.0; signal.len()];
+    let mut imag: Vec<f32> = vec![0.0; signal.len()];
 
-    // debug
-    for v in signal {
-        println!("val={}", v);
+    for i in 0..signal.len() {
+        real[i] = signal[i].re;
+        imag[i] = signal[i].im;
     }
-    scramble();
-    unscramble();
+
+    scramble(real, imag);
+    unscramble(real, imag);
+
+    let freq: Vec<f32> = vec![0.0; signal.len()];
+    return freq;
 }
 
-fn scramble() {
+/// Scramble data
+fn scramble(real: Vec<f32>, imag: Vec<f32>) {
     // TODO: Implement
 }
 
-fn unscramble() {
+/// Unscramble data
+fn unscramble(real: Vec<f32>, imag: Vec<f32>) {
     // TODO: Implement
 }
