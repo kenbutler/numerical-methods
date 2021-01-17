@@ -64,7 +64,7 @@ fn scramble(x: &mut Vec<f64>, y: &mut Vec<f64>) {
         n2 /= 2;
         let mut angle: f64 = 0.0;
         let arg = 2.0 * PI / (n1 as f64);
-        for j in 0..n2 - 1 {
+        for j in 0..n2 {
             let c = angle.cos();
             let s = -(angle.sin());
             for i in (j..n - 1).step_by(n1) {
