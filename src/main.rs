@@ -1,11 +1,17 @@
-// Modules
+// Imported modules
 mod fft;
 
+// Uses
+use simple_logger::SimpleLogger;
+use log::{info};
 use std::f32::consts::PI;
 use num_complex::Complex;
 
 fn main() {
-    println!("Testing FFT...");
+    SimpleLogger::new().init().unwrap();
+
+    info!("Testing FFT...");
+
     const SIGNAL_LENGTH: usize = 64;   // Length of signal
 
     // Define time vector
@@ -30,7 +36,8 @@ fn main() {
     }
 
     // Execute FFT
-    fft::fft(sin_fn);
-    fft::fft(cos_fn);
-    fft::fft(step_fn);
+    let mut _freq: Vec<Complex<f32>>;
+    _freq = fft::fft(sin_fn);
+    _freq = fft::fft(cos_fn);
+    _freq = fft::fft(step_fn);
 }
