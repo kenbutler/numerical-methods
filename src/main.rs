@@ -37,11 +37,11 @@ fn main() {
     let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
     let mut res;
 
-    //    info!("FFT of Sine Function");
-    //    res = fft::fft(sin_fn, sampling_freq);
-    //    for i in 0..res.0.len() {
-    //        debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
-    //    }
+    info!("FFT of Sine Function");
+    res = fft::fft(sin_fn, sampling_freq);
+    for i in 0..res.0.len() {
+        debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
+    }
 
     info!("FFT of Cosine Function");
     res = fft::fft(cos_fn, sampling_freq);

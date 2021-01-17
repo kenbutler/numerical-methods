@@ -1,5 +1,3 @@
-// Modules
-
 // Uses
 use log::{info, error, debug};
 use std::f64::consts::PI;
@@ -12,6 +10,7 @@ use num_complex::Complex;
 /// Existing crate: https://docs.rs/rustfft/5.0.1/rustfft/
 ///
 /// * `signal` - Complex signal
+/// * `sampling_frequency` - Frequency at which signal is sampled
 pub fn fft(signal: Vec<Complex<f64>>, sampling_frequency: f64) -> (Vec<f64>, Vec<f64>) {
     info!("Entered FFT");
 
@@ -120,3 +119,90 @@ fn unscramble(x: &mut Vec<f64>, y: &mut Vec<f64>) {
         y[idx_i] /= n as f64;
     }
 }  // unscramble()
+
+/// Unit tests
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn test_step() {
+        info!("FFT of Step Function");
+        // Set up
+        const SIGNAL_LENGTH: usize = 64;   // Length of signal
+        let mut time: Vec<f64> = vec![0.0; SIGNAL_LENGTH];
+        let mut step_fn: Vec<Complex<f64>> = vec![Complex::new(0.0, 0.0); time.len()];  // Step function
+        for i in 0..SIGNAL_LENGTH {
+            let f = i as f64;
+            let sl = SIGNAL_LENGTH as f64;
+            time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
+            step_fn[i].re = 1.0;
+        }
+        let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
+        // Execute
+        let res = fft(step_fn, sampling_freq);
+        for i in 0..res.0.len() {
+            if i == 0 {
+                assert_eq!(res.0[i].round(), 0.0);  // Frequency
+                assert_eq!(res.1[i], 1.0);  // Magnitude
+            } else {
+                assert_eq!(res.1[i].round(), 0.0);  // Magnitude
+            }
+        }
+    }
+
+    #[test]
+    fn test_sine() {
+        info!("FFT of Sine Function");
+        // Set up
+        const SIGNAL_LENGTH: usize = 64;   // Length of signal
+        let mut time: Vec<f64> = vec![0.0; SIGNAL_LENGTH];
+        let mut sin_fn: Vec<Complex<f64>> = vec![Complex::new(0.0, 0.0); time.len()];  // sin(2*pi*t)
+        for i in 0..SIGNAL_LENGTH {
+            let f = i as f64;
+            let sl = SIGNAL_LENGTH as f64;
+            time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
+            let radians = 2.0 * PI * time[i];
+            sin_fn[i].re = radians.sin();
+        }
+        let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
+        // Execute
+        let res = fft(sin_fn, sampling_freq);
+        for i in 0..res.0.len() {
+            if i == 1 {
+                assert_eq!(res.0[i].round(), 1.0);  // Frequency
+                assert_eq!(res.1[i], 0.5);  // Magnitude
+            } else {
+                assert_eq!(res.1[i].round(), 0.0);  // Magnitude
+            }
+        }
+    }
+
+    #[test]
+    fn test_cosine() {
+        info!("FFT of Cosine Function");
+        // Set up
+        const SIGNAL_LENGTH: usize = 64;   // Length of signal
+        let mut time: Vec<f64> = vec![0.0; SIGNAL_LENGTH];
+        let mut cos_fn: Vec<Complex<f64>> = vec![Complex::new(0.0, 0.0); time.len()];  // sin(2*pi*t)
+        for i in 0..SIGNAL_LENGTH {
+            let f = i as f64;
+            let sl = SIGNAL_LENGTH as f64;
+            time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
+            let radians = 4.0 * PI * time[i];
+            cos_fn[i].re = radians.cos();
+        }
+        let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
+        // Execute
+        let res = fft(cos_fn, sampling_freq);
+        for i in 0..res.0.len() {
+            if i == 2 {
+                assert_eq!(res.0[i].round(), 2.0);  // Frequency
+                assert_eq!(res.1[i], 0.5);  // Magnitude
+            } else {
+                assert_eq!(res.1[i].round(), 0.0);  // Magnitude
+            }
+        }
+    }
+}
