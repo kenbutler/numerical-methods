@@ -43,7 +43,7 @@ Magnitude = sqrt( real^2 + imag^2 )
 ### Result images
 Below are examples of images associated to unit test functions.
 
-![Step Function|80%](./img/step.png)
+![Step Function|400x300](./img/step.png)
 
 ![Cos(2 * PI * t)|80%](./img/cos2pi.png)
 
