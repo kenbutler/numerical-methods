@@ -10,6 +10,7 @@ edition = "2018"
 log = "0.4.13"
 env_logger = "0.8.2"
 simple_logger = "1.11.0"
+plotters = "0.3.0"
 
 [dependencies.num-complex]
 version = "0.3"

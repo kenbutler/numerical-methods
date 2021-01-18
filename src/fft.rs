@@ -142,9 +142,10 @@ mod tests {
         let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
         // Execute
         let res = fft(step_fn, sampling_freq);
+        let expected_freq = 0.0;
         for i in 0..res.0.len() {
-            if i == 0 {
-                assert_eq!(res.0[i].round(), 0.0);  // Frequency
+            if i == expected_freq as usize {
+                assert_eq!(res.0[i].round(), expected_freq);  // Frequency
                 assert_eq!(res.1[i], 1.0);  // Magnitude
             } else {
                 assert_eq!(res.1[i].round(), 0.0);  // Magnitude
@@ -163,15 +164,16 @@ mod tests {
             let f = i as f64;
             let sl = SIGNAL_LENGTH as f64;
             time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
-            let radians = 2.0 * PI * time[i];
+            let radians = 4.0 * PI * time[i];
             sin_fn[i].re = radians.sin();
         }
         let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
         // Execute
         let res = fft(sin_fn, sampling_freq);
+        let expected_freq = 2.0;
         for i in 0..res.0.len() {
-            if i == 1 {
-                assert_eq!(res.0[i].round(), 1.0);  // Frequency
+            if i == expected_freq as usize {
+                assert_eq!(res.0[i].round(), expected_freq);  // Frequency
                 assert_eq!(res.1[i], 0.5);  // Magnitude
             } else {
                 assert_eq!(res.1[i].round(), 0.0);  // Magnitude
@@ -190,15 +192,15 @@ mod tests {
             let f = i as f64;
             let sl = SIGNAL_LENGTH as f64;
             time[i] = f / sl;  // Normalization to make trigonometric calculations nicer
-            let radians = 4.0 * PI * time[i];
+            let radians = 2.0 * PI * time[i];
             cos_fn[i].re = radians.cos();
         }
         let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
         // Execute
         let res = fft(cos_fn, sampling_freq);
         for i in 0..res.0.len() {
-            if i == 2 {
-                assert_eq!(res.0[i].round(), 2.0);  // Frequency
+            if i == 1 {
+                assert_eq!(res.0[i].round(), 1.0);  // Frequency
                 assert_eq!(res.1[i], 0.5);  // Magnitude
             } else {
                 assert_eq!(res.1[i].round(), 0.0);  // Magnitude
