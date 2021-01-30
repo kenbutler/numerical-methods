@@ -139,10 +139,9 @@ pub fn plot(freq: Vec<f64>, mag: Vec<f64>, title: &str, filename: &str) -> Resul
 
     // Define chart builder axes
     let mut chart = ChartBuilder::on(&root)
-        .caption(title, ("sans-serif", 18).into_font())
-        .margin(5)
-        .x_label_area_size(30)
-        .y_label_area_size(30)
+        .caption(title, ("sans-serif", 20).into_font())
+        .x_label_area_size(40)
+        .y_label_area_size(50)
         .build_cartesian_2d(x_0..x_n, y_0..y_n)?;
 
     // Line
@@ -163,9 +162,10 @@ pub fn plot(freq: Vec<f64>, mag: Vec<f64>, title: &str, filename: &str) -> Resul
     chart
         .configure_mesh()
         .y_desc("Magnitude")
-        .x_desc("Frequency")
+        .x_desc("Frequency (Hz)")
+        .disable_x_mesh()
+        .axis_desc_style(("sans-serif", 18))
         .draw()?;
-    // Add .disable_x_mesh() to disable mesh in X-axis (vice versa for Y)
 
     Ok(())
 }
