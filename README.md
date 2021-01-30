@@ -2,7 +2,7 @@
 
 This repository implements various numerical methods.
 
-In Progress:
+Complete:
 - FFT
 
 Future:
@@ -45,7 +45,7 @@ For the sine function, the angular frequency is 4 * PI, so the frequency = 2 (i.
 ### Magnitude of Complex Signal
 Magnitude = sqrt( real^2 + imag^2 )
 
-# Result images
+### Result images
 Below are examples of images associated to unit test functions. Reference images are from a project I did in 2013 in Fortran with plotting in Excel.
 
 | Function    | Fortran/Excel (reference)              | Rust                         |
