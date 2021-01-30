@@ -41,10 +41,22 @@ For the sine function, the angular frequency is 4 * PI, so the frequency = 2 (i.
 Magnitude = sqrt( real^2 + imag^2 )
 
 ### Result images
-Below are examples of images associated to unit test functions.
+Below are examples of images associated to unit test functions. Reference images are from a project I did in 2013 in Fortran with plotting in Excel.
 
+#### Step Function
+Fortran/Excel (reference)
+![Step Function](./img/reference_step.png)
+Rust
 ![Step Function](./img/step.png)
 
+#### Cos(2 * PI * t)
+Fortran/Excel (reference)
+![Cos(2 * PI * t)](./img/reference_cos2pi.png)
+Rust
 ![Cos(2 * PI * t)](./img/cos2pi.png)
 
+#### Sin(4 * PI * t)
+Fortran/Excel (reference)
+![Sin(4 * PI * t)](./img/reference_sin4pi.png)
+Rust
 ![Sin(4 * PI * t)](./img/sin4pi.png)

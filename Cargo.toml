@@ -11,6 +11,9 @@ log = "0.4.13"
 env_logger = "0.8.2"
 simple_logger = "1.11.0"
 plotters = "0.3.0"
+rand = "0.7.3"
+rand_distr = "0.2.2"
+rand_xorshift = "0.2.0"
 
 [dependencies.num-complex]
 version = "0.3"

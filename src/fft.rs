@@ -123,38 +123,49 @@ fn unscramble(x: &mut Vec<f64>, y: &mut Vec<f64>) {
 
 use plotters::prelude::*;
 
-pub fn plot(title: &str, filename: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let root =
-        BitMapBackend::new(filename, (640, 480)).into_drawing_area();
-    // "plotters-doc-data/histogram.png"
+pub fn plot(freq: Vec<f64>, mag: Vec<f64>, title: &str, filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let root = BitMapBackend::new(filename, (805, 588)).into_drawing_area();
 
     root.fill(&WHITE)?;
 
-    let mut chart = ChartBuilder::on(&root)
-        .x_label_area_size(35)
-        .y_label_area_size(40)
-        .margin(5)
-        .caption(title, ("sans-serif", 50))
-        .build_cartesian_2d((0u32..10u32).into_segmented(), 0u32..10u32)?;
+    // Get axes limits and mutable Y-axis data for applying to draw_series() of plot
+    let mut mutable_mag = mag.clone();
+    let mut sorted_mag = mag.clone();
+    sorted_mag.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    let x_0 = freq[0] as f32;
+    let x_n = *freq.last().unwrap() as f32;
+    let y_0: f32 = 0.0;
+    let y_n: f32 = *sorted_mag.last().unwrap() as f32;
 
+    // Define chart builder axes
+    let mut chart = ChartBuilder::on(&root)
+        .caption(title, ("sans-serif", 18).into_font())
+        .margin(5)
+        .x_label_area_size(30)
+        .y_label_area_size(30)
+        .build_cartesian_2d(x_0..x_n, y_0..y_n)?;
+
+    // Line
+    chart.draw_series(
+        AreaSeries::new(
+            freq.iter().zip(mutable_mag.iter_mut()).map(|(x, y)| (*x as f32, *y as f32)),
+            0.0,
+            &BLUE.mix(0.2),
+        ).border_style(&BLUE),
+    )?;
+
+    // Markers
+    chart.draw_series(
+        freq.iter().zip(mutable_mag.iter_mut()).map(|(x, y)| Circle::new((*x as f32, *y as f32), 5, BLUE.filled())),
+    )?;
+
+    // Draw labels and mesh
     chart
         .configure_mesh()
-        .disable_x_mesh()
-        .bold_line_style(&WHITE.mix(0.3))
-        .y_desc("Value")
-        .x_desc("Time")
-        .axis_desc_style(("sans-serif", 15))
+        .y_desc("Magnitude")
+        .x_desc("Frequency")
         .draw()?;
-
-    let data = [
-        0u32, 1, 1, 1, 4, 2, 5, 7, 8, 6, 4, 2, 1, 8, 3, 3, 3, 4, 4, 3, 3, 3,
-    ];
-
-    chart.draw_series(
-        Histogram::vertical(&chart)
-            .style(RED.mix(0.5).filled())
-            .data(data.iter().map(|x: &u32| (*x, 1))),
-    )?;
+    // Add .disable_x_mesh() to disable mesh in X-axis (vice versa for Y)
 
     Ok(())
 }

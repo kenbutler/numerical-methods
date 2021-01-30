@@ -44,17 +44,28 @@ fn main() {
     for i in 0..NUM_FREQ_2_SHOW {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
-    _plot_res = fft::plot("Test Plot", "debug.png");
+    _plot_res = fft::plot(res.0[..NUM_FREQ_2_SHOW].to_vec(),
+                          res.1[..NUM_FREQ_2_SHOW].to_vec(),
+                          "FFT of sin(4*PI*t)",
+                          "img/sin4pi.png");
 
     info!("FFT of Cosine Function");
     res = fft::fft(cos_fn, sampling_freq);
     for i in 0..NUM_FREQ_2_SHOW {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
+    _plot_res = fft::plot(res.0[..NUM_FREQ_2_SHOW].to_vec(),
+                          res.1[..NUM_FREQ_2_SHOW].to_vec(),
+                          "FFT of cos(2*PI*t)",
+                          "img/cos2pi.png");
 
     info!("FFT of Step Function");
     res = fft::fft(step_fn, sampling_freq);
     for i in 0..NUM_FREQ_2_SHOW {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
+    _plot_res = fft::plot(res.0[..NUM_FREQ_2_SHOW].to_vec(),
+                          res.1[..NUM_FREQ_2_SHOW].to_vec(),
+                          "FFT of Step Function",
+                          "img/step.png");
 }
