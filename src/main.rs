@@ -1,5 +1,6 @@
 // Imported modules
 mod fft;
+mod root_finding;
 
 // Uses
 use simple_logger::SimpleLogger;
@@ -10,7 +11,7 @@ use num_complex::Complex;
 fn main() {
     SimpleLogger::new().init().unwrap();
 
-    info!("Testing FFT...");
+    info!("----- FFT -----");
 
     const SIGNAL_LENGTH: usize = 64;   // Length of signal
 
@@ -55,4 +56,15 @@ fn main() {
     for i in 0..NUM_FREQ_2_SHOW {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
+
+    info!("----- Root Finding -----");
+    let mut x_data: Vec<f32> = vec![];
+    let mut y_data: Vec<f32> = vec![];
+    for i in -10..11 {
+        let x = i as f32;
+        x_data.push(x);
+        y_data.push(x * x);
+    }
+    let data = root_finding::Data { x: x_data, y: y_data };
+    root_finding::newton_raphson(&data);
 }
