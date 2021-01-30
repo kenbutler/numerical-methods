@@ -48,8 +48,8 @@ Magnitude = sqrt( real^2 + imag^2 )
 # Result images
 Below are examples of images associated to unit test functions. Reference images are from a project I did in 2013 in Fortran with plotting in Excel.
 
-| Function    | Fortran/Excel (reference)                                       | Rust                                                |
-|-------------|-----------------------------------------------------------------|-----------------------------------------------------|
-| Step        | <img src="./img/reference_step.png" width="300" height="180">   | <img src="./img/step.png" width="300" height="180"> |
+| Function    | Fortran/Excel (reference)              | Rust                         |
+|-------------|----------------------------------------|------------------------------|
+| Step        | <img src="./img/reference_step.png">   | <img src="./img/step.png">   |
 | Cos(2*PI*t) | <img src="./img/reference_cos2pi.png"> | <img src="./img/cos2pi.png"> |
-| Sin(4*PI*t) | <img src="./img/reference_sin4pi.png" width="400" height="300"> | <img src="./img/sin4pi.png" width="400" height="300"> |
+| Sin(4*PI*t) | <img src="./img/reference_sin4pi.png"> | <img src="./img/sin4pi.png"> |
