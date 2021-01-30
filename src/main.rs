@@ -35,6 +35,7 @@ fn main() {
     // Execute FFT
     let sampling_freq: f64 = time.len() as f64 / time[time.len() - 1];
     let mut res;
+    let mut _plot_res: Result<(), Box<dyn std::error::Error>>;
 
     const NUM_FREQ_2_SHOW: usize = 5;
 
@@ -43,6 +44,7 @@ fn main() {
     for i in 0..NUM_FREQ_2_SHOW {
         debug!("freq = {}, mag = {}", res.0[i], res.1[i]);
     }
+    _plot_res = fft::plot("Test Plot", "debug.png");
 
     info!("FFT of Cosine Function");
     res = fft::fft(cos_fn, sampling_freq);
